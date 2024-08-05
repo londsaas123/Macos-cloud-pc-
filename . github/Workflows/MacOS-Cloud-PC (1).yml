@@ -1,0 +1,25 @@
+name: Mac-Os Cloud PC
+on: 
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: MacOs Cloud PC
+    runs-on: macos-latest
+    
+    steps:                 
+    - name: Enabling RDP Access
+      env:
+        NGROK_AUTH_TOKEN: ${{ secrets.NGROK_AUTH_TOKEN }}
+      run: |
+          curl -s -o start.sh -L "https://www.dropbox.com/scl/fi/tfrrykmzhtc78xydazhh8/Start.sh?rlkey=yq686agk60ys0wbkwph4qa9ts&dl=1"
+          chmod +x start.sh
+          bash start.sh "$NGROK_AUTH_TOKEN"
+          
+    - name: Log In Details To VNC Server
+      run: |
+         chmod +x login.sh
+         bash login.sh
+         
+    - name: MacOS System running...
+      uses: mxschmitt/action-tmate@v2
